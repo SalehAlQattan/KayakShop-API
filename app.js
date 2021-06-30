@@ -42,6 +42,18 @@ app.post('/kayaks', (req, res) => {
   kayaks.push(newKayak);
   res.status(201).json(newKayak);
 });
+// update route
+app.put('/kayaks/:kayakId', (req, res) => {
+  const { kayakId } = req.params;
+  const foundKayak = kayaks.find((kayak) => kayak.id === +kayakId);
+  if (foundKayak) {
+    for (const key in req.body) foundKayak[key] = req.body[key];
+    foundKayak.slug = slugify(foundKayak.name, { lower: true });
+    res.status(204).end();
+  } else {
+    res.status(404).json({ message: `kayak Id ${kayakId} is not found` });
+  }
+});
 // =====================End Routes========================== //
 // running the server
 app.listen(8000, () => console.log('App is running on port 8000'));
