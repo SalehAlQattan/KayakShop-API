@@ -7,6 +7,7 @@ const {
   createKayak,
   updateKayak,
 } = require('../API/controllers');
+// routes
 const router = express.Router();
 // getting all kayaks route
 router.get('/', fetchKayak);
