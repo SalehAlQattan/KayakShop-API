@@ -22,7 +22,8 @@ app.use('/kayaks', kayaksRoutes);
 // running the server and connecting to db
 const run = async () => {
   try {
-    await db.sequelize.authenticate();
+    // we add {force: true} one time to allow add new colum in DB
+    await db.sequelize.sync();
     console.log('Database is connected');
     app.listen(8000, () => console.log('App is running on port 8000'));
   } catch (error) {
