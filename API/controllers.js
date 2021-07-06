@@ -1,65 +1,51 @@
 // importing Model
 const { Kayak } = require('../db/models');
 
+// !XXX!
+exports.kayakFetch = async (kayakId, next) => {
+  try {
+    const kayak = await Kayak.findByPk(kayakId);
+    return kayak;
+  } catch (error) {
+    next(error);
+  }
+};
+
 // =====================// fetch all kayaks //=========================== //
-exports.fetchKayak = async (req, res) => {
+exports.fetchKayak = async (req, res, next) => {
   try {
     const kayaks = await Kayak.findAll({
       attributes: { exclude: ['createdAt', 'updatedAt'] },
     });
     res.json(kayaks);
   } catch (error) {
-    res.status(500).json({ message: error.message });
-    console.error(error);
+    next(error);
   }
 };
-
 // =====================// create kayak //=========================== //
-exports.createKayak = async (req, res) => {
+exports.createKayak = async (req, res, next) => {
   try {
     const newKayak = await Kayak.create(req.body);
     res.status(201).json(newKayak);
   } catch (error) {
-    res.status(500).json({ message: error.message });
-    console.error(error);
+    next(error);
   }
 };
-
 // =====================// delete single kayaks //=========================== //
-exports.deleteKayak = async (req, res) => {
-  // getting the kayak id from the url
-  const { kayakId } = req.params;
+exports.deleteKayak = async (req, res, next) => {
   try {
-    // check if the kayak is exists
-    const foundKayak = await Kayak.findByPk(kayakId);
-    // if the kayak exists delete it
-    if (foundKayak) {
-      await foundKayak.destroy();
-      res.status(204).end();
-    } else {
-      res.status(404).json({ message: `kayak is not found` });
-    }
+    await req.kayak.destroy();
+    res.status(204).end();
   } catch (error) {
-    res.status(500).json({ message: error.message });
-    console.error(error);
+    next(error);
   }
 };
 // =====================// update kayak //=========================== //
-exports.updateKayak = async (req, res) => {
-  // getting the kayak id from the url
-  const { kayakId } = req.params;
+exports.updateKayak = async (req, res, next) => {
   try {
-    // checking if the the kayak is exists
-    const foundKayak = await Kayak.findByPk(kayakId);
-    if (foundKayak) {
-      console.log(foundKayak);
-      await foundKayak.update(req.body);
-      res.status(204).end();
-    } else {
-      res.status(404).json({ message: `kayak is not found` });
-    }
+    await req.kayak.update(req.body);
+    res.status(204).end();
   } catch (error) {
-    res.status(500).json({ message: error.message });
-    console.error(error);
+    next(error);
   }
 };
