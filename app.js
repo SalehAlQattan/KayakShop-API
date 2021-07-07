@@ -15,6 +15,8 @@ app.use(cors());
 app.use(express.json());
 // Routes
 app.use('/kayaks', kayaksRoutes);
+// media routes
+app.use('/media', express.static('media'));
 // error handling
 app.use((err, res, req, next) => {
   res

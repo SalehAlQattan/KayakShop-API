@@ -10,6 +10,8 @@ const {
 } = require('../API/controllers');
 // routes
 const router = express.Router();
+// image uploader package
+const multer = require('multer');
 
 // param middleware
 router.param('kayakId', async (req, res, next, kayakId) => {
@@ -24,13 +26,22 @@ router.param('kayakId', async (req, res, next, kayakId) => {
   }
 });
 
+// multer
+const storage = multer.diskStorage({
+  destination: './media',
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}${file.originalname}`);
+  },
+});
+// passing storage to upload
+const upload = multer({ storage });
 // getting all kayaks route
 router.get('/', fetchKayak);
 // deleting kayak route
 router.delete('/:kayakId', deleteKayak);
 // creating kayak route
-router.post('/', createKayak);
+router.post('/', upload.single('img'), createKayak);
 // update route
-router.put('/:kayakId', updateKayak);
+router.put('/:kayakId', upload.single('img'), updateKayak);
 // exporting the route
 module.exports = router;

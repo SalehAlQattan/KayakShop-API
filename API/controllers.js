@@ -25,6 +25,7 @@ exports.fetchKayak = async (req, res, next) => {
 // =====================// create kayak //=========================== //
 exports.createKayak = async (req, res, next) => {
   try {
+    if (req.file) req.body.img = `http://${req.get('host')}/${req.file.path}`;
     const newKayak = await Kayak.create(req.body);
     res.status(201).json(newKayak);
   } catch (error) {
@@ -43,8 +44,9 @@ exports.deleteKayak = async (req, res, next) => {
 // =====================// update kayak //=========================== //
 exports.updateKayak = async (req, res, next) => {
   try {
-    await req.kayak.update(req.body);
-    res.status(204).end();
+    if (req.file) req.body.img = `http://${req.get('host')}/${req.file.path}`;
+    const updatedKayak = await req.kayak.update(req.body);
+    res.json(updatedKayak);
   } catch (error) {
     next(error);
   }
