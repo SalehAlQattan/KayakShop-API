@@ -4,7 +4,7 @@ const cors = require('cors');
 // new instance of express
 const app = express();
 // import routes
-const kayaksRoutes = require('./API/routes');
+const kayaksRoutes = require('./API/kayak/routes');
 // importing db
 const db = require('./db/models');
 
