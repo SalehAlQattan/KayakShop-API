@@ -11,8 +11,6 @@ const {
 } = require('./controllers');
 // routes
 const router = express.Router();
-// image uploader package
-const multer = require('multer');
 
 // multer
 const storage = multer.diskStorage({

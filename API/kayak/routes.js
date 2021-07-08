@@ -4,7 +4,6 @@ const express = require('express');
 const {
   fetchKayak,
   deleteKayak,
-  createKayak,
   updateKayak,
   kayakFetch,
 } = require('./controllers');
@@ -39,8 +38,6 @@ const upload = multer({ storage });
 router.get('/', fetchKayak);
 // deleting kayak route
 router.delete('/:kayakId', deleteKayak);
-// creating kayak route
-router.post('/', upload.single('img'), createKayak);
 // update route
 router.put('/:kayakId', upload.single('img'), updateKayak);
 // exporting the route

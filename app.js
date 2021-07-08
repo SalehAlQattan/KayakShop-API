@@ -5,6 +5,7 @@ const cors = require('cors');
 const app = express();
 // import routes
 const kayaksRoutes = require('./API/kayak/routes');
+const manufactureRoutes = require('./API/manufacture/routes');
 // importing db
 const db = require('./db/models');
 
@@ -15,10 +16,11 @@ app.use(cors());
 app.use(express.json());
 // Routes
 app.use('/kayaks', kayaksRoutes);
+app.use('/manfactures', manufactureRoutes);
 // media routes
 app.use('/media', express.static('media'));
 // error handling
-app.use((err, res, req, next) => {
+app.use((err, req, res, next) => {
   res
     .status(err.status || 500)
     .json({ message: err.message || 'Internal Server Error!' });
@@ -33,7 +35,7 @@ app.use((req, res, next) => {
 const run = async () => {
   try {
     // we add {force: true} one time to allow add new colum in DB
-    await db.sequelize.sync();
+    await db.sequelize.sync({ alter: true });
     console.log('Database is connected');
     app.listen(8000, () => console.log('App is running on port 8000'));
   } catch (error) {

@@ -40,6 +40,7 @@ exports.createManufacure = async (req, res, next) => {
 exports.createKayak = async (req, res, next) => {
   try {
     if (req.file) req.body.img = `http://${req.get('host')}/${req.file.path}`;
+    req.body.manufactureId = req.manufacture.id;
     const newKayak = await Kayak.create(req.body);
     res.status(201).json(newKayak);
   } catch (error) {
