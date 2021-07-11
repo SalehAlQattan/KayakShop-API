@@ -6,6 +6,7 @@ const app = express();
 // import routes
 const kayaksRoutes = require('./API/kayak/routes');
 const manufactureRoutes = require('./API/manufacture/routes');
+const userRoutes = require('./API/user/routes');
 // importing db
 const db = require('./db/models');
 
@@ -17,6 +18,7 @@ app.use(express.json());
 // Routes
 app.use('/kayaks', kayaksRoutes);
 app.use('/manfactures', manufactureRoutes);
+app.use('/signup', userRoutes);
 // media routes
 app.use('/media', express.static('media'));
 // error handling
