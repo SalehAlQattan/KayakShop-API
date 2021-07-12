@@ -1,6 +1,7 @@
 // importing packages
 const express = require('express');
 const cors = require('cors');
+const passport = require('passport');
 // new instance of express
 const app = express();
 // import routes
@@ -9,16 +10,20 @@ const manufactureRoutes = require('./API/manufacture/routes');
 const userRoutes = require('./API/user/routes');
 // importing db
 const db = require('./db/models');
+//
+const { localStrategy } = require('./middleware/passport');
 
 // ===================== start middleware ========================== //
 // using cors to allow acces data
 app.use(cors());
 // parsing body as json
 app.use(express.json());
-// Routes
+// middlewares
 app.use('/kayaks', kayaksRoutes);
 app.use('/manfactures', manufactureRoutes);
-app.use('/signup', userRoutes);
+app.use(userRoutes);
+app.use(passport.initialize());
+passport.use(localStrategy);
 // media routes
 app.use('/media', express.static('media'));
 // error handling

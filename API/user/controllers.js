@@ -2,6 +2,8 @@
 const { User } = require('../../db/models');
 // pack
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { JWT_EXPIRATION_MS, JWT_SECERT } = require('../../config/keys');
 
 exports.singup = async (req, res, next) => {
   const { password } = req.body;
@@ -15,4 +17,15 @@ exports.singup = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+exports.singin = async (req, res, next) => {
+  const { user } = req;
+  const payload = {
+    id: user.id,
+    username: user.username,
+    exp: Date.now() + JWT_EXPIRATION_MS,
+  };
+  const token = jwt.sign(JSON.stringify(payload), JWT_SECERT);
+  res.json({ token });
 };
