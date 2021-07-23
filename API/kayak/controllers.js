@@ -1,5 +1,5 @@
 // importing Model
-const { Kayak } = require('../../db/models');
+const { Kayak, Manufacture } = require('../../db/models');
 
 // !XXX!
 exports.kayakFetch = async (kayakId, next) => {
@@ -15,7 +15,12 @@ exports.kayakFetch = async (kayakId, next) => {
 exports.fetchKayak = async (req, res, next) => {
   try {
     const kayaks = await Kayak.findAll({
-      attributes: { exclude: ['createdAt', 'updatedAt'] },
+      attributes: { exclude: ['manufactureId', 'createdAt', 'updatedAt'] },
+      include: {
+        model: Manufacture,
+        as: 'manufacture',
+        attributes: ['name'],
+      },
     });
     res.json(kayaks);
   } catch (error) {

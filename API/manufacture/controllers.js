@@ -28,7 +28,16 @@ exports.fetchManufacture = async (req, res, next) => {
 // =====================// create manufacure //=========================== //
 exports.createManufacure = async (req, res, next) => {
   try {
+    const foundManufacture = await Manufacture.findOne({
+      where: { userId: req.user.id },
+    });
+    if (foundManufacture) {
+      const err = new Error('You already have a manufacture');
+      err.status = 400;
+      return next(err);
+    }
     if (req.file) req.body.img = `http://${req.get('host')}/${req.file.path}`;
+    req.body.userId = req.user.id;
     const newManufacture = await Manufacture.create(req.body);
     res.status(201).json(newManufacture);
   } catch (error) {
@@ -39,10 +48,16 @@ exports.createManufacure = async (req, res, next) => {
 // =====================// create kayak //=========================== //
 exports.createKayak = async (req, res, next) => {
   try {
-    if (req.file) req.body.img = `http://${req.get('host')}/${req.file.path}`;
-    req.body.manufactureId = req.manufacture.id;
-    const newKayak = await Kayak.create(req.body);
-    res.status(201).json(newKayak);
+    if (req.user.id === req.manufacture.userId) {
+      if (req.file) req.body.img = `http://${req.get('host')}/${req.file.path}`;
+      req.body.manufactureId = req.manufacture.id;
+      const newKayak = await Kayak.create(req.body);
+      res.status(201).json(newKayak);
+    } else {
+      const err = new Error('Unauthorized!');
+      err.status = 401;
+      return next(err);
+    }
   } catch (error) {
     next(error);
   }

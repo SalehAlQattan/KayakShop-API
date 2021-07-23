@@ -2,6 +2,8 @@
 const express = require('express');
 // package
 const multer = require('multer');
+const { session } = require('passport');
+const passport = require('passport');
 // importing controllers
 const {
   fetchManufacture,
@@ -37,9 +39,21 @@ router.param('manufactureId', async (req, res, next, manufactureId) => {
 
 // getting all manufactures route
 router.get('/', fetchManufacture);
+
 // creating manufacture route
-router.post('/', upload.single('img'), createManufacure);
+router.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  upload.single('img'),
+  createManufacure
+);
+
 // create kayak route
-router.post('/:manufactureId/kayaks', upload.single('img'), createKayak);
+router.post(
+  '/:manufactureId/kayaks',
+  passport.authenticate('jwt', { session: false }),
+  upload.single('img'),
+  createKayak
+);
 // exporting the route
 module.exports = router;

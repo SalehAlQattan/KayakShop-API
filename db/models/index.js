@@ -48,9 +48,18 @@ db.Manufacture.hasMany(db.Kayak, {
   allowNull: false,
   as: 'kayaks',
 });
-db.Kayak.belongsTo(db.Kayak, {
+db.Kayak.belongsTo(db.Manufacture, {
   as: 'manufacture',
   foreignKey: 'manufactureId',
+});
+
+db.User.hasOne(db.Manufacture, {
+  as: 'manufacture',
+  foreignKey: 'userId',
+});
+
+db.Manufacture.belongsTo(db.User, {
+  as: 'User',
 });
 
 module.exports = db;

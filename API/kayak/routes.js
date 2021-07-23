@@ -11,6 +11,7 @@ const {
 const router = express.Router();
 // image uploader package
 const multer = require('multer');
+const passport = require('passport');
 
 // param middleware
 router.param('kayakId', async (req, res, next, kayakId) => {
@@ -37,8 +38,17 @@ const upload = multer({ storage });
 // getting all kayaks route
 router.get('/', fetchKayak);
 // deleting kayak route
-router.delete('/:kayakId', deleteKayak);
+router.delete(
+  '/:kayakId',
+  passport.authenticate('jwt', { session: false }),
+  deleteKayak
+);
 // update route
-router.put('/:kayakId', upload.single('img'), updateKayak);
+router.put(
+  '/:kayakId',
+  passport.authenticate('jwt', { session: false }),
+  upload.single('img'),
+  updateKayak
+);
 // exporting the route
 module.exports = router;
