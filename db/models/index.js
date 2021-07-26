@@ -62,4 +62,16 @@ db.Manufacture.belongsTo(db.User, {
   as: 'User',
 });
 
+db.User.hasMany(db.Order, { foreignKey: 'userId', as: 'orders' });
+db.Order.belongsTo(db.User, { as: 'user' });
+
+db.Order.belongsToMany(db.Kayak, {
+  through: db.OrderItem,
+  foreignKey: 'orderId',
+});
+db.Kayak.belongsToMany(db.Order, {
+  through: db.OrderItem,
+  foreignKey: 'kayakId',
+});
+
 module.exports = db;

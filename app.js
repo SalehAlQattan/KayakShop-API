@@ -10,6 +10,7 @@ const app = express();
 const kayaksRoutes = require('./API/kayak/routes');
 const manufactureRoutes = require('./API/manufacture/routes');
 const userRoutes = require('./API/user/routes');
+const orderRoutes = require('./API/order/routes');
 
 // importing db
 const db = require('./db/models');
@@ -23,10 +24,13 @@ app.use(cors());
 // parsing body as json
 app.use(express.json());
 
-// middlewares
+// routes
 app.use('/kayaks', kayaksRoutes);
 app.use('/manufactures', manufactureRoutes);
 app.use(userRoutes);
+app.use(orderRoutes);
+
+// middlewares
 app.use(passport.initialize());
 passport.use(localStrategy);
 passport.use(jwtStrategy);
